@@ -1,1 +1,2 @@
 name,model,os,url,status
+MyLittleServer,Dell PowerEdge R710,ESXi 6.5,idrac-mylittleserver.domain.com,up
