@@ -1,29 +1,5 @@
-<#
-@echo off
-
-set /P drachost="Host: "
-set /p dracuser="Username: "
-set "psCommand=powershell -Command "$pword = read-host 'Enter Password' -AsSecureString ; ^
-    $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
-        [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
-for /f "usebackq delims=" %%p in (`%psCommand%`) do set dracpwd=%%p
-
-.\jre\bin\java -cp avctKVM.jar -Djava.library.path=.\lib com.avocent.idrac.kvm.Main ip=%drachost% kmport=5900 vport=5900 user=%dracuser% passwd=%dracpwd% apcp=1 version=2 vmprivilege=true "helpurl=https://%drachost%:443/help/contents.html"
-
-#>
 $idraclist = @()
 $idraclist = Import-Csv .\serverlist.csv
-
-<# $idraclist = @(
-    @{name="NTPRSRV-HYP10";model="Dell PowerEdge R610";os="Windows Server 2016 Datacenter";url="idrac-ntprsrv-hyp10.ntmax.lan";status="up"},
-    @{name="NTPRSRV-HYP11";model="Dell PowerEdge R610";os="Windows Server 2016 Datacenter";url="idrac-ntprsrv-hyp11.ntmax.lan";status="up"},
-    @{name="NTPRSRV-HYP13";model="Dell PowerEdge R310";os="Windows Server 2016 Datacenter";url="idrac-ntprsrv-hyp13.ntmax.lan";status="up"},
-    @{name="NTPRSRV-HYP14";model="Dell PowerEdge R610";os="XCP-NG 7.5.0";url="idrac-ntprsrv-hyp14.ntmax.lan";status="up"},
-    @{name="NTPRSRV-HYP15";model="Dell PowerEdge R610";os="XCP-NG 7.5.0";url="idrac-ntprsrv-hyp15.ntmax.lan";status="up"}
-    ) #>
-
-
-
 
 $acceptableAnswer = $null
 $url = $null
@@ -84,9 +60,7 @@ if($addServer) {
     }
 
     [uint16]$server_os = Read-host -Prompt "What is the server's OS [1-$os_count]"
-
-    #$idraclist += @{name=$server_name;model=$server_model;os=$os_list[$server_os-1];url=$server_url;status="up"}
-
+  
     Add-Content -Value "$server_name,$server_model,$($os_list[$server_os-1]),$server_url,up" -Path .\serverlist.csv
 
 }
